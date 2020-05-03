@@ -1,7 +1,7 @@
 package api
 
 import "encoding/json"
-import "goanda/models"
+import "github.com/xtordoir/goanda/models"
 
 func parseAccountOpenPositions(msg *[]byte) (models.AccountPositions, error) {
 	var p models.AccountPositions

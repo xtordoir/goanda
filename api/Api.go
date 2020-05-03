@@ -3,7 +3,7 @@ package api
 import "fmt"
 import "io/ioutil"
 import "net/http"
-import "goanda/models"
+import "github.com/xtordoir/goanda/models"
 
 // API is an api instance with a context to call endpoints
 type API struct {
