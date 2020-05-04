@@ -8,3 +8,9 @@ func parseAccountOpenPositions(msg *[]byte) (models.AccountPositions, error) {
 	err := json.Unmarshal(*msg, &p)
 	return p, err
 }
+
+func parseClientPrice(msg *[]byte) (models.ClientPrice, error) {
+	var p models.ClientPrice
+	err := json.Unmarshal(*msg, &p)
+	return p, err
+}
