@@ -14,3 +14,9 @@ func parseClientPrice(msg *[]byte) (models.ClientPrice, error) {
 	err := json.Unmarshal(*msg, &p)
 	return p, err
 }
+
+func parsePrices(msg *[]byte) (models.Prices, error) {
+	var p models.Prices
+	err := json.Unmarshal(*msg, &p)
+	return p, err
+}

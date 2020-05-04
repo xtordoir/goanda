@@ -20,3 +20,8 @@ type PricingHeartbeat struct {
 	Type string    `json:"type"`
 	Time time.Time `json:"time"`
 }
+
+// Prices is the object response from GetPricing call
+type Prices struct {
+	Prices []ClientPrice `json:"prices"`
+}
