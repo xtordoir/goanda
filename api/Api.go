@@ -40,7 +40,7 @@ func (api *API) GetOpenPositions() (*models.AccountPositions, error) {
 }
 
 // GetPricing fetches the prricing for a list of instruments
-func (api *API) GetPricing(instruments []string) (*models.ClientPrice, error) {
+func (api *API) GetPricing(instruments []string) (*models.Prices, error) {
 
 	instrumentsQstr := strings.Join(instruments, ",")
 	// TODO DEDUPLICATE THIS
@@ -61,7 +61,7 @@ func (api *API) GetPricing(instruments []string) (*models.ClientPrice, error) {
 	}
 	data, _ := ioutil.ReadAll(response.Body)
 	//fmt.Println(string(data))
-	prices, _ := parseClientPrice(&data)
+	prices, _ := parsePrices(&data)
 	//fmt.Println(positions)
 
 	return &prices, nil
