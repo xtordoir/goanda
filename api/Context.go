@@ -15,4 +15,9 @@ func (context *Context) CreateAPI() API {
 	}
 }
 
-// Create a streaming api instance from the Context
+// CreateStreamAPI creates a streaming api instance from the Context
+func (context *Context) CreateStreamAPI() StreamAPI {
+	return StreamAPI{
+		context: *context,
+	}
+}
