@@ -2,10 +2,11 @@ package api
 
 // Context is the api Context
 type Context struct {
-	ApiURL      string
-	Token       string
-	Account     string
-	Application string
+	ApiURL       string
+	StreamApiURL string
+	Token        string
+	Account      string
+	Application  string
 }
 
 // CreateAPI Creates an api instance from the Context

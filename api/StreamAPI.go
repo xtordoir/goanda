@@ -21,9 +21,7 @@ type heartbeatProcessor func(p *models.PricingHeartbeat)
 // PricingStream starts a stream of prices
 func (streamApi *StreamAPI) PricingStream(instruments []string, pchan chan models.ClientPrice, hchan chan models.PricingHeartbeat) {
 
-	var p models.ClientPrice
-
-	url := streamApi.context.ApiURL + "/v3/accounts/" + streamApi.context.Account + "/pricing/stream"
+	url := streamApi.context.StreamApiURL + "/v3/accounts/" + streamApi.context.Account + "/pricing/stream"
 	qurl := url + "?instruments=" + strings.Join(instruments, ",")
 	client := &http.Client{}
 	req, _ := http.NewRequest("GET", qurl, nil)
@@ -38,6 +36,7 @@ func (streamApi *StreamAPI) PricingStream(instruments []string, pchan chan model
 			if err != nil {
 				panic(err)
 			}
+			var p models.ClientPrice
 			json.Unmarshal([]byte(line), &p)
 			if p.Type == "HEARTBEAT" {
 				h := models.PricingHeartbeat{
