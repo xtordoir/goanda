@@ -20,3 +20,9 @@ func parsePrices(msg *[]byte) (models.Prices, error) {
 	err := json.Unmarshal(*msg, &p)
 	return p, err
 }
+
+func parseCandles(msg *[]byte) (models.Candles, error) {
+	var p models.Candles
+	err := json.Unmarshal(*msg, &p)
+	return p, err
+}

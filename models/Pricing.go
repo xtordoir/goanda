@@ -25,3 +25,28 @@ type PricingHeartbeat struct {
 type Prices struct {
 	Prices []ClientPrice `json:"prices"`
 }
+
+// Candles is the object returns by the GetCandles call
+type Candles struct {
+	Instrument  string        `json:"instrument"`
+	Granularity string        `json:"granularity"`
+	Candles     []CandleStick `json:"candles"`
+}
+
+// CandleStick is the structure for a single Candle data
+type CandleStick struct {
+	Time     time.Time       `json:"time"`
+	Bid      CandleStickData `json:"bid"`
+	Ask      CandleStickData `json:"ask"`
+	Mid      CandleStickData `json:"mid"`
+	Volume   int             `json:"volume"`
+	Complete bool            `json:"complete"`
+}
+
+// CandleStickData is the actiual OHLC prices
+type CandleStickData struct {
+	O float64 `json:"o,string"`
+	H float64 `json:"h,string"`
+	L float64 `json:"l,string"`
+	C float64 `json:"c,string"`
+}
