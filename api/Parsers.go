@@ -1,10 +1,19 @@
 package api
 
-import "encoding/json"
-import "github.com/xtordoir/goanda/models"
+import (
+	"encoding/json"
+
+	"github.com/xtordoir/goanda/models"
+)
 
 func parseAccountOpenPositions(msg *[]byte) (models.AccountPositions, error) {
 	var p models.AccountPositions
+	err := json.Unmarshal(*msg, &p)
+	return p, err
+}
+
+func parseAccountPosition(msg *[]byte) (models.AccountPosition, error) {
+	var p models.AccountPosition
 	err := json.Unmarshal(*msg, &p)
 	return p, err
 }
@@ -25,4 +34,10 @@ func parseCandles(msg *[]byte) (models.Candles, error) {
 	var p models.Candles
 	err := json.Unmarshal(*msg, &p)
 	return p, err
+}
+
+func parsePositionBook(msg *[]byte) (models.PositionBook, error) {
+	var p models.PositionBookResponse
+	err := json.Unmarshal(*msg, &p)
+	return p.PositionBook, err
 }
