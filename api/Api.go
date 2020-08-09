@@ -33,12 +33,14 @@ func (api *API) GetOpenPositions() (*models.AccountPositions, error) {
 		fmt.Printf("The HTTP request failed with error %s\n", err)
 		return nil, err
 	}
-	data, _ := ioutil.ReadAll(response.Body)
-	//fmt.Println(string(data))
-	positions, _ := parseAccountOpenPositions(&data)
+	data, errb := ioutil.ReadAll(response.Body)
+	if errb != nil {
+		return nil, errb
+	} //fmt.Println(string(data))
+	positions, errp := parseAccountOpenPositions(&data)
 	//fmt.Println(positions)
 
-	return &positions, nil
+	return &positions, errp
 }
 
 // GetPosition gets the Position on the account
@@ -58,12 +60,15 @@ func (api *API) GetPosition(instrument string) (*models.AccountPosition, error) 
 		fmt.Printf("The HTTP request failed with error %s\n", err)
 		return nil, err
 	}
-	data, _ := ioutil.ReadAll(response.Body)
+	data, errb := ioutil.ReadAll(response.Body)
+	if errb != nil {
+		return nil, errb
+	}
 	//fmt.Println(string(data))
-	positions, _ := parseAccountPosition(&data)
+	positions, errp := parseAccountPosition(&data)
 	//fmt.Println(positions)
 
-	return &positions, nil
+	return &positions, errp
 }
 
 // GetPricing fetches the prricing for a list of instruments
@@ -86,12 +91,14 @@ func (api *API) GetPricing(instruments []string) (*models.Prices, error) {
 		fmt.Printf("The HTTP request failed with error %s\n", err)
 		return nil, err
 	}
-	data, _ := ioutil.ReadAll(response.Body)
-	//fmt.Println(string(data))
-	prices, _ := parsePrices(&data)
+	data, errb := ioutil.ReadAll(response.Body)
+	if errb != nil {
+		return nil, errb
+	} //fmt.Println(string(data))
+	prices, errp := parsePrices(&data)
 	//fmt.Println(positions)
 
-	return &prices, nil
+	return &prices, errp
 }
 
 // GetCandles fetches a number of candles for a given instrument and granularity
@@ -113,12 +120,14 @@ func (api *API) GetCandles(instrument string, num int, granularity string) (*mod
 		fmt.Printf("The HTTP request failed with error %s\n", err)
 		return nil, err
 	}
-	data, _ := ioutil.ReadAll(response.Body)
-	//fmt.Println(string(data))
-	candles, _ := parseCandles(&data)
+	data, errb := ioutil.ReadAll(response.Body)
+	if errb != nil {
+		return nil, errb
+	} //fmt.Println(string(data))
+	candles, errp := parseCandles(&data)
 	//fmt.Println(positions)
 
-	return &candles, nil
+	return &candles, errp
 }
 
 // PostMarketOrder posts a Market orderr a number of candles for a given instrument and granularity
@@ -146,12 +155,13 @@ func (api *API) PostMarketOrder(instrument string, units int64) (error, error) {
 		fmt.Printf("The HTTP request failed with error %s\n", err)
 		return nil, err
 	}
-	data, _ := ioutil.ReadAll(response.Body)
+	data, errp := ioutil.ReadAll(response.Body)
+
 	fmt.Println(string(data))
 	//	orderStatus, _ := parseOrderStatus(&data)
 	//fmt.Println(positions)
 
-	return nil, nil
+	return nil, errp
 }
 
 // GetPositionBook fetches the last PositionBook for instruments
@@ -172,10 +182,13 @@ func (api *API) GetPositionBook(instrument string) (*models.PositionBook, error)
 		fmt.Printf("The HTTP request failed with error %s\n", err)
 		return nil, err
 	}
-	data, _ := ioutil.ReadAll(response.Body)
+	data, errb := ioutil.ReadAll(response.Body)
+	if errb != nil {
+		return nil, errb
+	}
 	//fmt.Println(string(data))
-	positionBook, _ := parsePositionBook(&data)
+	positionBook, errp := parsePositionBook(&data)
 	//fmt.Println(positions)
 
-	return &positionBook, nil
+	return &positionBook, errp
 }

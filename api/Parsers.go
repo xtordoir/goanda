@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"errors"
 
 	"github.com/xtordoir/goanda/models"
 )
@@ -9,12 +10,18 @@ import (
 func parseAccountOpenPositions(msg *[]byte) (models.AccountPositions, error) {
 	var p models.AccountPositions
 	err := json.Unmarshal(*msg, &p)
+	if err == nil && p.LastTransactionID == "" {
+		return p, errors.New("No data: LastTransactionID empty")
+	}
 	return p, err
 }
 
 func parseAccountPosition(msg *[]byte) (models.AccountPosition, error) {
 	var p models.AccountPosition
 	err := json.Unmarshal(*msg, &p)
+	if err == nil && p.LastTransactionID == "" {
+		return p, errors.New("No data: LastTransactionID empty")
+	}
 	return p, err
 }
 
