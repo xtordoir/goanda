@@ -48,9 +48,18 @@ func main() {
 	fmt.Printf("%s\n", ctx.Account)
 	fmt.Printf("%s\n", ctx.Application)
 
-
 	api := ctx.CreateAPI()
+
+	if len(ctx.Account) == 0 {
+		accounts, err := api.GetAccounts()
+		if err == nil && len(accounts.Accounts) > 0 {
+			fmt.Printf("Setting Account # in context: %s\n", accounts.Accounts[0].ID)
+			ctx.Account = accounts.Accounts[0].ID
+		}
+	}
+
 	pos, err := api.GetPricing([]string{"EUR_USD"})
+
 	// err := api.GetAccounts()
 	if err != nil {
 		fmt.Printf("The HTTP request failed with error %s\n", err)
