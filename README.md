@@ -77,6 +77,13 @@ func (api *API) PostMarketOrder(instrument string, units int64) (error, error)
 func (api *API) GetPositionBook(instrument string) (*models.PositionBook, error)
 ```
 
+- **GetAccounts()**: Get the list of accounts for the api key:
+
+```
+func (api *API) GetAccounts() (*models.Accounts, error)
+```
+
+
 ## Streaming API Endpoints
 
 Implemented Endpoints for Streaming are in the `api` sub-package (StreamApi.go):

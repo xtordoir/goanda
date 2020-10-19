@@ -48,3 +48,10 @@ func parsePositionBook(msg *[]byte) (models.PositionBook, error) {
 	err := json.Unmarshal(*msg, &p)
 	return p.PositionBook, err
 }
+
+func parseAccounts(msg *[]byte) (models.Accounts, error) {
+	var acc models.Accounts
+	err := json.Unmarshal(*msg, &acc)
+
+	return acc, err
+}

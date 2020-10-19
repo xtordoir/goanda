@@ -192,3 +192,30 @@ func (api *API) GetPositionBook(instrument string) (*models.PositionBook, error)
 
 	return &positionBook, errp
 }
+
+// GetAccounts gets the list of accounts for the provided token
+func (api *API) GetAccounts() (*models.Accounts, error) {
+	client := &http.Client{}
+	apiURL := api.context.ApiURL
+	token := api.context.Token
+	req, errr := http.NewRequest("GET", apiURL+"/v3/accounts", nil)
+	if errr != nil {
+		return nil, errr
+	}
+	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add("Authorization", "Bearer "+token)
+	response, err := client.Do(req)
+	if err != nil {
+		fmt.Printf("The HTTP request failed with error %s\n", err)
+		return nil, err
+	}
+	data, errb := ioutil.ReadAll(response.Body)
+	if errb != nil {
+		return nil, errb
+	}
+	fmt.Println(string(data))
+	accounts, errp := parseAccounts(&data)
+	//fmt.Println(positions)
+
+	return &accounts, errp
+}
