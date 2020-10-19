@@ -10,6 +10,10 @@ type Tick struct {
 	Ask        float64
 }
 
+func (tick *Tick) price() float64 {
+	return (tick.Ask + tick.Bid) / 2
+}
+
 // ClientPrice2Tick converts a ClientPrice to a Tick, by taking the first Bid and Ask
 func ClientPrice2Tick(price *ClientPrice) Tick {
 	return Tick{
