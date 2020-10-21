@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"strings"
 
@@ -45,7 +46,8 @@ func (streamApi *StreamAPI) PricingStream(instruments []string, pchan chan model
 		for {
 			line, err := reader.ReadBytes('\n')
 			if err != nil {
-				panic(err)
+				log.Println(err)
+				continue
 			}
 			var p models.ClientPrice
 			json.Unmarshal([]byte(line), &p)
