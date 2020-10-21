@@ -10,7 +10,8 @@ type Tick struct {
 	Ask        float64
 }
 
-func (tick *Tick) price() float64 {
+// Price of a Tick (avergae Bid-Ask)
+func (tick *Tick) Price() float64 {
 	return (tick.Ask + tick.Bid) / 2
 }
 
