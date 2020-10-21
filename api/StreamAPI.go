@@ -18,6 +18,17 @@ type StreamAPI struct {
 type priceProcessor func(p *models.ClientPrice)
 type heartbeatProcessor func(p *models.PricingHeartbeat)
 
+// TickStream starts a stream of ticks, hiding the Prices structs
+func (streamApi *StreamAPI) TickStream(instruments []string, tchan chan models.Tick, hchan chan models.PricingHeartbeat) {
+	pchan := make(chan models.ClientPrice)
+	go streamApi.PricingStream(instruments, pchan, hchan)
+	fmt.Println("Starting loop on Prices")
+	for {
+		price := <-pchan
+		tchan <- models.ClientPrice2Tick(&price)
+	}
+}
+
 // PricingStream starts a stream of prices
 func (streamApi *StreamAPI) PricingStream(instruments []string, pchan chan models.ClientPrice, hchan chan models.PricingHeartbeat) {
 
