@@ -16,6 +16,13 @@ func priceProcessor(c chan models.ClientPrice) {
 	}
 }
 
+func tickProcessor(c chan models.Tick) {
+	for {
+		tick := <-c
+		fmt.Println(tick)
+	}
+}
+
 func heartbeatProcessor(c chan models.PricingHeartbeat) {
 	for {
 		data := <-c
@@ -27,10 +34,12 @@ func main() {
 
 	// channels for data
 	pchan := make(chan models.ClientPrice)
+	tchan := make(chan models.Tick)
 	hchan := make(chan models.PricingHeartbeat)
 
 	// start processors for data
 	go priceProcessor(pchan)
+	go tickProcessor(tchan)
 	go heartbeatProcessor(hchan)
 
 	// context to create api
@@ -55,6 +64,7 @@ func main() {
 		if err == nil && len(accounts.Accounts) > 0 {
 			fmt.Printf("Setting Account # in context: %s\n", accounts.Accounts[0].ID)
 			ctx.Account = accounts.Accounts[0].ID
+			api = ctx.CreateAPI()
 		}
 	}
 
@@ -67,6 +77,7 @@ func main() {
 	fmt.Printf("%s\n", pos)
 
 	streamapi := ctx.CreateStreamAPI()
-	streamapi.PricingStream([]string{"EUR_USD", "BCO_USD", "SPX500_USD", "EUR_JPY"}, pchan, hchan)
-	// streamapi.PricingStream([]string{"EUR_USD"}, pchan, hchan)
+	//streamapi.PricingStream([]string{"EUR_USD", "BCO_USD", "SPX500_USD", "EUR_JPY"}, pchan, hchan)
+
+	streamapi.TickStream([]string{"EUR_USD", "BCO_USD", "SPX500_USD", "EUR_JPY"}, tchan, hchan)
 }
