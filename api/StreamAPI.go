@@ -47,7 +47,7 @@ func (streamApi *StreamAPI) PricingStream(instruments []string, pchan chan model
 			line, err := reader.ReadBytes('\n')
 			if err != nil {
 				log.Println(err)
-				continue
+				break
 			}
 			var p models.ClientPrice
 			json.Unmarshal([]byte(line), &p)
