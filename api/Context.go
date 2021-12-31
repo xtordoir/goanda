@@ -22,3 +22,10 @@ func (context *Context) CreateStreamAPI() StreamAPI {
 		context: *context,
 	}
 }
+
+// CreateStreamAPI creates a streaming api instance from the Context
+func (context *Context) CreateTransactionStreamAPI() TransactionStreamAPI {
+	return TransactionStreamAPI{
+		context: *context,
+	}
+}
