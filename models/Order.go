@@ -4,7 +4,7 @@ package models
 
 // Order is an order definition
 type Order struct {
-	Units        int64  `json:"units,string"`
+	Units        Unit  `json:"units,string"`
 	Instrument   string `json:"instrument"`
 	TimeInForce  string `json:"timeInForce"`
 	Type         string `json:"type"`
