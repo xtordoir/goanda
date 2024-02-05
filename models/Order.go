@@ -17,7 +17,7 @@ type OrderRequest struct {
 }
 
 // MakeMarketOrder creates a martket Order
-func MakeMarketOrder(instrument string, units int64) Order {
+func MakeMarketOrder(instrument string, units Unit) Order {
 	return Order{
 		Units:        units,
 		Instrument:   instrument,
