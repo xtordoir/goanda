@@ -131,7 +131,7 @@ func (api *API) GetCandles(instrument string, num int, granularity string) (*mod
 }
 
 // PostMarketOrder posts a Market orderr a number of candles for a given instrument and granularity
-func (api *API) PostMarketOrder(instrument string, units int64) (error, error) {
+func (api *API) PostMarketOrder(instrument string, units models.Unit) (error, error) {
 
 	orderReq := models.OrderRequest{
 		Order: models.MakeMarketOrder(instrument, units),
