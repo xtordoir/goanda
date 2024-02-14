@@ -130,6 +130,36 @@ func (api *API) GetCandles(instrument string, num int, granularity string) (*mod
 	return &candles, errp
 }
 
+// GetOrders gets the open Orders for an instrument
+func (api *API) GetAccountOrders(instrument string) (*models.AccountOrders, error) {
+	// TODO DEDUPLICATE THIS
+	client := &http.Client{}
+	apiURL := api.context.ApiURL
+	token := api.context.Token
+	account := api.context.Account
+  qStr := fmt.Sprintf("?instrument=%s&count=%d", instrument, 100)
+	req, errr := http.NewRequest("GET", apiURL+"/v3/accounts/"+account+"/orders/" + qStr, nil)
+	if errr != nil {
+		return nil, errr
+	}
+	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add("Authorization", "Bearer "+token)
+	response, err := client.Do(req)
+	if err != nil {
+		fmt.Printf("The HTTP request failed with error %s\n", err)
+		return nil, err
+	}
+	data, errb := ioutil.ReadAll(response.Body)
+	if errb != nil {
+		return nil, errb
+	}
+	//fmt.Println(string(data))
+	orders, errp := parseAccountOrders(&data)
+	//fmt.Println(positions)
+
+	return &orders, errp
+}
+
 // PostMarketOrder posts a Market orderr a number of candles for a given instrument and granularity
 func (api *API) PostMarketOrder(instrument string, units models.Unit) (error, error) {
 
@@ -163,6 +193,53 @@ func (api *API) PostMarketOrder(instrument string, units models.Unit) (error, er
 
 	return nil, errp
 }
+
+// PostMarketOrder posts a Market orderr a number of candles for a given instrument and granularity
+func (api *API) PostLimitOrder(instrument string, units models.Unit, unitsDecimals int, price float64, priceDecimals int) (error, error) {
+	// "order": {
+	//     "price": "1.5000",
+	//     "timeInForce": "GTC",
+	//     "instrument": "USD_CAD",
+	//     "units": "-1000",
+	//     "type": "LIMIT",
+	//     "positionFill": "DEFAULT"
+	//   }
+	orderReq := models.LimitOrderRequest{
+		Order: models.NewLimitOrder(instrument, units, unitsDecimals, price, priceDecimals),
+	}
+	payload, _ := json.Marshal(orderReq)
+
+	// TODO DEDUPLICATE THIS
+	client := &http.Client{}
+	account := api.context.Account
+	apiURL := api.context.ApiURL
+	token := api.context.Token
+	req, errr := http.NewRequest("POST", apiURL+"/v3/accounts/"+account+"/orders",
+		bytes.NewBuffer(payload))
+	if errr != nil {
+		return nil, errr
+	}
+	fmt.Printf("LimitOrderRequest: %+v\n", orderReq)
+	// safeguard here
+	return nil, nil
+	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add("Authorization", "Bearer "+token)
+	response, err := client.Do(req)
+	if err != nil {
+		fmt.Printf("The HTTP request failed with error %s\n", err)
+		return nil, err
+	}
+	data, errp := ioutil.ReadAll(response.Body)
+
+	fmt.Println(string(data))
+	//	orderStatus, _ := parseOrderStatus(&data)
+	//fmt.Println(positions)
+
+	return nil, errp
+}
+
+
+
 
 // GetPositionBook fetches the last PositionBook for instruments
 func (api *API) GetPositionBook(instrument string) (*models.PositionBook, error) {

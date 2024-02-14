@@ -32,7 +32,7 @@ func (streamApi *TransactionStreamAPI) StartTransactionStream(tchan chan models.
 	// }
 }
 
-// AutoRestart for the PricingStream function as connection reset can result in panic
+// transactionStreamAutoRestart for the TransactionStream function as connection reset can result in panic
 func transactionStreamAutoRestart(name string, nPanics int64, f func()) {
 	defer func() {
 		if v := recover(); v != nil {
@@ -45,7 +45,7 @@ func transactionStreamAutoRestart(name string, nPanics int64, f func()) {
 	f()
 }
 
-// PricingStream starts a stream of prices
+// TransactionStream starts a stream of prices
 func (streamApi *TransactionStreamAPI) TransactionStream(tchan chan models.Transaction, hchan chan models.TransactionHeartbeat) {
 
 	url := streamApi.context.StreamApiURL + "/v3/accounts/" + streamApi.context.Account + "/transactions/stream"

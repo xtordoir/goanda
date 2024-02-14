@@ -22,3 +22,8 @@ type AccountPosition struct {
 	LastTransactionID string   `json:"lastTransactionID"`
 	Position          Position `json:"position"`
 }
+
+type AccountOrders struct {
+	LastTransactionID string               `json:"lastTransactionID"`
+	Orders            []AccountOrder       `json:"orders"`
+}
