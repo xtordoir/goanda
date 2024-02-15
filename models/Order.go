@@ -21,8 +21,8 @@ type Order struct {
 }
 
 type LimitOrder struct {
-	Price        string  `json:"price,string"`
-	Units        string  `json:"units,string"`
+	Price        string  `json:"price"`
+	Units        string  `json:"units"`
 	Instrument   string `json:"instrument"`
 	TimeInForce  string `json:"timeInForce"`
 	Type         string `json:"type"`

@@ -185,9 +185,9 @@ func (api *API) PostMarketOrder(instrument string, units models.Unit) (error, er
 		fmt.Printf("The HTTP request failed with error %s\n", err)
 		return nil, err
 	}
-	data, errp := ioutil.ReadAll(response.Body)
+	_, errp := ioutil.ReadAll(response.Body)
 
-	fmt.Println(string(data))
+	//fmt.Println(string(data))
 	//	orderStatus, _ := parseOrderStatus(&data)
 	//fmt.Println(positions)
 
@@ -219,9 +219,6 @@ func (api *API) PostLimitOrder(instrument string, units models.Unit, unitsDecima
 	if errr != nil {
 		return nil, errr
 	}
-	fmt.Printf("LimitOrderRequest: %+v\n", orderReq)
-	// safeguard here
-	return nil, nil
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Authorization", "Bearer "+token)
 	response, err := client.Do(req)
@@ -229,9 +226,8 @@ func (api *API) PostLimitOrder(instrument string, units models.Unit, unitsDecima
 		fmt.Printf("The HTTP request failed with error %s\n", err)
 		return nil, err
 	}
-	data, errp := ioutil.ReadAll(response.Body)
+	_, errp := ioutil.ReadAll(response.Body)
 
-	fmt.Println(string(data))
 	//	orderStatus, _ := parseOrderStatus(&data)
 	//fmt.Println(positions)
 
