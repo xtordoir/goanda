@@ -10,9 +10,15 @@ type AccountOrder struct {
 	Price        float64 `json:"price,string"`
 	Instrument   string `json:"instrument"`
 }
+type Orders struct {
+	LastTransactionID string               `json:"lastTransactionID"`
+	Orders            []Order              `json:"orders"`
+}
 
 // Order is an order definition
 type Order struct {
+	Id           string `json:"id"`
+	Price        string  `json:"price"`
 	Units        Unit  `json:"units,string"`
 	Instrument   string `json:"instrument"`
 	TimeInForce  string `json:"timeInForce"`
@@ -21,6 +27,7 @@ type Order struct {
 }
 
 type LimitOrder struct {
+	Id           string `json:"id"`
 	Price        string  `json:"price"`
 	Units        string  `json:"units"`
 	Instrument   string `json:"instrument"`

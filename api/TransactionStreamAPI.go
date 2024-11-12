@@ -20,10 +20,10 @@ type transactionProcessor func(p *models.Transaction)
 type transactionHeartbeatProcessor func(p *models.TransactionHeartbeat)
 
 // TickStream starts a stream of transactions
-func (streamApi *TransactionStreamAPI) StartTransactionStream(tchan chan models.Transaction, hchan chan models.TransactionHeartbeat) {
+func (streamApi *TransactionStreamAPI) StartTransactionStream(tchan chan models.Transaction, ofchan chan models.OrderFillTransaction, hchan chan models.TransactionHeartbeat) {
 
 	// AutoRestart for TransactionStream
-	go autoRestart("TransactionStream", 0, func() { streamApi.TransactionStream(tchan, hchan) })
+	go autoRestart("TransactionStream", 0, func() { streamApi.TransactionStream(tchan, ofchan, hchan) })
 
 	fmt.Println("Starting loop on Transactions")
 	// for {
@@ -46,7 +46,7 @@ func transactionStreamAutoRestart(name string, nPanics int64, f func()) {
 }
 
 // TransactionStream starts a stream of prices
-func (streamApi *TransactionStreamAPI) TransactionStream(tchan chan models.Transaction, hchan chan models.TransactionHeartbeat) {
+func (streamApi *TransactionStreamAPI) TransactionStream(tchan chan models.Transaction, ofchan chan models.OrderFillTransaction, hchan chan models.TransactionHeartbeat) {
 
 	url := streamApi.context.StreamApiURL + "/v3/accounts/" + streamApi.context.Account + "/transactions/stream"
 	client := &http.Client{}
@@ -69,6 +69,10 @@ func (streamApi *TransactionStreamAPI) TransactionStream(tchan chan models.Trans
 				var h models.TransactionHeartbeat
 				json.Unmarshal([]byte(line), &h)
 				hchan <- h
+			} else if p.Type == "ORDER_FILL" {
+				var of models.OrderFillTransaction
+				json.Unmarshal([]byte(line), &of)
+				ofchan <- of
 			} else {
 				tchan <- p
 			}

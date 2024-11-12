@@ -160,6 +160,36 @@ func (api *API) GetAccountOrders(instrument string) (*models.AccountOrders, erro
 	return &orders, errp
 }
 
+// GetOrders gets the open Orders for an instrument
+func (api *API) GetOrders(instrument string) (*models.Orders, error) {
+	// TODO DEDUPLICATE THIS
+	client := &http.Client{}
+	apiURL := api.context.ApiURL
+	token := api.context.Token
+	account := api.context.Account
+  qStr := fmt.Sprintf("?instrument=%s&count=%d", instrument, 100)
+	req, errr := http.NewRequest("GET", apiURL+"/v3/accounts/"+account+"/orders/" + qStr, nil)
+	if errr != nil {
+		return nil, errr
+	}
+	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add("Authorization", "Bearer "+token)
+	response, err := client.Do(req)
+	if err != nil {
+		fmt.Printf("The HTTP request failed with error %s\n", err)
+		return nil, err
+	}
+	data, errb := ioutil.ReadAll(response.Body)
+	if errb != nil {
+		return nil, errb
+	}
+	//fmt.Println(string(data))
+	orders, errp := parseOrders(&data)
+	//fmt.Println(positions)
+
+	return &orders, errp
+}
+
 // PostMarketOrder posts a Market orderr a number of candles for a given instrument and granularity
 func (api *API) PostMarketOrder(instrument string, units models.Unit) (error, error) {
 
@@ -291,4 +321,30 @@ func (api *API) GetAccounts() (*models.Accounts, error) {
 	//fmt.Println(positions)
 
 	return &accounts, errp
+}
+
+func (api *API) GetAccount(accountId string) (*models.AccountDetails, error) {
+	client := &http.Client{}
+	apiURL := api.context.ApiURL
+	token := api.context.Token
+	req, errr := http.NewRequest("GET", apiURL + "/v3/accounts/" + accountId, nil)
+	if errr != nil {
+		return nil, errr
+	}
+	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add("Authorization", "Bearer "+token)
+	response, err := client.Do(req)
+	if err != nil {
+		fmt.Printf("The HTTP request failed with error %s\n", err)
+		return nil, err
+	}
+	data, errb := ioutil.ReadAll(response.Body)
+	//fmt.Println(string(data))
+	if errb != nil {
+		return nil, errb
+	}
+	account, errp := parseAccount(&data)
+
+	return &account, errp
+
 }

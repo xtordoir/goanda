@@ -25,6 +25,15 @@ func parseAccountOrders(msg *[]byte) (models.AccountOrders, error) {
 	return p, err
 }
 
+func parseOrders(msg *[]byte) (models.Orders, error) {
+	var p models.Orders
+	err := json.Unmarshal(*msg, &p)
+	if err == nil && p.LastTransactionID == "" {
+		return p, errors.New("No data: LastTransactionID empty")
+	}
+	return p, err
+}
+
 func parseAccountPosition(msg *[]byte) (models.AccountPosition, error) {
 	var p models.AccountPosition
 	err := json.Unmarshal(*msg, &p)
@@ -60,6 +69,13 @@ func parsePositionBook(msg *[]byte) (models.PositionBook, error) {
 
 func parseAccounts(msg *[]byte) (models.Accounts, error) {
 	var acc models.Accounts
+	err := json.Unmarshal(*msg, &acc)
+
+	return acc, err
+}
+
+func parseAccount(msg *[]byte) (models.AccountDetails, error) {
+	var acc models.AccountDetails
 	err := json.Unmarshal(*msg, &acc)
 
 	return acc, err

@@ -26,6 +26,7 @@ func main() {
 
 	// channels for data
 	tchan := make(chan models.Transaction)
+	ofchan := make(chan models.OrderFillTransaction)
 	hchan := make(chan models.TransactionHeartbeat)
 
 	// start processors for data
@@ -69,6 +70,6 @@ func main() {
 	streamapi := ctx.CreateTransactionStreamAPI()
 	//streamapi.PricingStream([]string{"EUR_USD", "BCO_USD", "SPX500_USD", "EUR_JPY"}, pchan, hchan)
 
-	streamapi.StartTransactionStream(tchan, hchan)
+	streamapi.StartTransactionStream(tchan, ofchan, hchan)
 	select{}
 }
